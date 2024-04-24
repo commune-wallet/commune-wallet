@@ -1,0 +1,33 @@
+version: '3'
+services:
+  backend:
+    container_name: backend
+    build: ./node
+    ports:
+      - "5000:5000"  # Map backend port to host port 5000
+    environment:
+      - MONGO_URI=mongodb+srv://beautylotus718:eF4X90mcxLvWsp9v@cluster0.yezkr0h.mongodb.net/
+      - JWT_SECRET=duchess    
+
+  frontend:
+    container_name: frontend
+    build: ./next
+    ports:
+      - "3000:80"  # Map frontend port to host port 4200 (adjust if different)
+    depends_on:
+      - backend  # Ensure backend starts before frontend
+    volumes:
+      - ./next:/usr/src/app
+    environment:
+      - NEXT_PUBLIC_PINATA_API_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiIzZjY5OWMzMi1jZDA5LTRlN2EtYmJjYi1kNjA5YWQ3MTRjZTAiLCJlbWFpbCI6InBpb3Ryc2F0a293aWFrMEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJpZCI6IkZSQTEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX0seyJpZCI6Ik5ZQzEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiY2E4MmE4ZDFhMjc2ZDdhMjI0MjkiLCJzY29wZWRLZXlTZWNyZXQiOiIwNGYwMGI3NDM2YjBlNmE2ZWY5ZDRkYjUzOWVlYThhOGRiYjAyZTg0ZTA4MGU0ZmUyYzExODJhZTM4NTg0MTE4IiwiaWF0IjoxNzEyMTI4OTE3fQ.Pc-KG459RCuDwvE5a4N-hqVlVV11yRQdYucPLww_rgA
+      # NEXT_PUBLIC_BACKEND_API_URL: https://www.psifi.duckdns.org/api
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"  # Map MongoDB port to host port 27017
+    volumes:
+      - mongo-data:/data/db  # Persist data volume for MongoDB
+
+volumes:
+  mongo-data:  # Named volume for MongoDB data
